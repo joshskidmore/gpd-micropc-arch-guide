@@ -1,6 +1,5 @@
 # GPD MicroPC Dual Boot - Arch / Windows 10 Install Guide
-_NOTE: This guide is not yet complete and should only be used as a light reference right now._
-_Pull requests are greatly appreciated!_
+*NOTE: This guide is not yet complete and should only be used as a light reference right now. Pull requests are greatly appreciated!*
 
 This guide overviews how to do a full wipe of the GPD MicroPC, followed by a dual boot of
 Arch Linux and Windows 10.
