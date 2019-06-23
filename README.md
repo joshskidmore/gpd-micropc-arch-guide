@@ -1,7 +1,6 @@
 # GPD MicroPC Dual Boot - Arch / Windows 10 Install Guide
-
-# NOTE: This guide is not yet complete and should only be used as a light reference right now.
-# Pull requests are greatly appreciated!
+_NOTE: This guide is not yet complete and should only be used as a light reference right now._
+_Pull requests are greatly appreciated!_
 
 This guide overviews how to do a full wipe of the GPD MicroPC, followed by a dual boot of
 Arch Linux and Windows 10.
@@ -42,6 +41,9 @@ Arch Linux and Windows 10.
   - [Arch ISO](https://www.archlinux.org/download) written to USB stick
   - [Microsoft Windows 10 installer](https://www.microsoft.com/en-us/software-download/windows10ISO) on USB stick
   - an extra USB drive for the Arch 5.2 packages (or possibly add them to your Arch USB stick)
+      - [linux-mainline-5.2rc5-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-5.2rc5-1-x86_64.pkg.tar.gz)
+      - [linux-mainline-docs-5.2rc5-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-docs-5.2rc5-1-x86_64.pkg.tar.gz)
+      - [linux-mainline-headers-5.2rc5-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-headers-5.2rc5-1-x86_64.pkg.tar.gz)
   - ability to understand basic linux commands
   - patience (and eyesight) to spend a good bit of time looking at small, sideways text
 
