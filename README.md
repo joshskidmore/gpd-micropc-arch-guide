@@ -31,7 +31,7 @@ Arch Linux and Windows 10.
     - [XFCE4](#xfce4)
     - [Create ~/.xinitrc](#create-xinitrc)
     - [Start X](#start-x)
-
+- [Tips / Suggestions](#tips-suggestions)
 
 
 # Prerequisites
@@ -431,14 +431,45 @@ Create display config at `/etc/X11/xorg.conf.d/30-display.conf` with the followi
 
 ## Create `~/.xinitrc`
 
-    # Simple hack to allow mouse scrolling when right click button is held down
-    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Middle Emulation Enabled" 1
-    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Button Scrolling Button" 3
-    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Scroll Method Enabled" 0 0 1
-
     # Start XFCE4
     exec startxfce4
 
 ## Start X
 
     startx
+
+## Tips / Suggestions
+
+### Simple hack to allow mouse scrolling when middle click button is held down
+NOTE: Change `2` to `3` for `libinput Button Scrolling Button` to switch from middle to right click.
+
+    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Middle Emulation Enabled" 1
+    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Button Scrolling Button" 2
+    xinput --set-prop pointer:"AMR-4630-XXX-0- 0-1023 USB KEYBOARD Mouse" "libinput Scroll Method Enabled" 0 0 1
+
+### Remap CapsLK to act as `Ctrl` when held, but `Esc` when tapped:
+NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands to the `~/.Xmodmap` file as well.
+
+    xmodmap -e 'clear lock'
+    xmodmap -e 'clear control'
+    xmodmap -e 'keycode 66 = Control_L'
+    xmodmap -e 'add control = Control_L Control_R'
+    xmodmap -e 'keycode 108 = Caps_Lock'
+    xcape -e 'Control_L=Escape' -t 175
+
+### Make the `\`+`|` key act as a right-hand friendly `Ctrl` modifier when held, but `\`+`|` when tapped
+NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands to the `~/.Xmodmap` file as well.
+
+  xmodmap -e 'keycode 51 = Hyper_L'
+  xmodmap -e 'remove mod4 = Hyper_L'
+  xmodmap -e 'add Control = Hyper_L'
+  xmodmap -e 'keycode any = backslash bar'
+  xcape -e 'Hyper_L=backslash|bar' -t 175
+
+### Make the `/`+`?` key act as a right-hand friendly `Super` modifier when held, but `/`+`?` when tapped
+NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands to the `~/.Xmodmap` file as well.
+
+  xmodmap -e 'keycode 61 = Super_R'
+  xmodmap -e 'keycode any = slash question'
+  xcape -e 'Super_R=slash|question' -t 175
+
