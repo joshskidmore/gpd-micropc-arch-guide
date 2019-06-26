@@ -31,7 +31,7 @@ Arch Linux and Windows 10.
     - [XFCE4](#xfce4)
     - [Create ~/.xinitrc](#create-xinitrc)
     - [Start X](#start-x)
-- [Tips / Suggestions](#tips-suggestions)
+- [Tips / Suggestions](#tips--suggestions)
 
 
 # Prerequisites
