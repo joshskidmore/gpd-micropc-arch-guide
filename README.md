@@ -93,7 +93,7 @@ Arch Linux and Windows 10.
 
   5. Format the EFI partition to vfat
 
-        `mkfs.vfat /dev/sda2`
+        `mkfs.vfat /dev/sda1`
 
 
 # Step 2: Install Windows 10
@@ -190,7 +190,7 @@ Because we're using disk encryption and LVM2, we need to add and reorder mkinitc
 The MicroPC has an insanely weird bug in which the `battery` module must be included as a module
 in `/etc/mkinitcpio.conf` or the keyboard won't work when prompted for the LUKS password.
 
-    MODULES=(keyboard)
+    MODULES=(battery)
 
 With new HOOKS (and the odd module requirement) in-tow, regenerate your ramdisk and kernel using mkinitcpio:
 
