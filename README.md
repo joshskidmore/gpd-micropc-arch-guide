@@ -460,16 +460,16 @@ NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands
 ### Make the `\`+`|` key act as a right-hand friendly `Ctrl` modifier when held, but `\`+`|` when tapped
 NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands to the `~/.Xmodmap` file as well.
 
-  xmodmap -e 'keycode 51 = Hyper_L'
-  xmodmap -e 'remove mod4 = Hyper_L'
-  xmodmap -e 'add Control = Hyper_L'
-  xmodmap -e 'keycode any = backslash bar'
-  xcape -e 'Hyper_L=backslash|bar' -t 175
+    xmodmap -e 'keycode 51 = Hyper_L'
+    xmodmap -e 'remove mod4 = Hyper_L'
+    xmodmap -e 'add Control = Hyper_L'
+    xmodmap -e 'keycode any = backslash bar'
+    xcape -e 'Hyper_L=backslash|bar' -t 175
 
 ### Make the `/`+`?` key act as a right-hand friendly `Super` modifier when held, but `/`+`?` when tapped
 NOTE: This requires the `xcape` AUR package. You can move the `xmodmap` commands to the `~/.Xmodmap` file as well.
 
-  xmodmap -e 'keycode 61 = Super_R'
-  xmodmap -e 'keycode any = slash question'
-  xcape -e 'Super_R=slash|question' -t 175
+    xmodmap -e 'keycode 61 = Super_R'
+    xmodmap -e 'keycode any = slash question'
+    xcape -e 'Super_R=slash|question' -t 175
 
