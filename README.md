@@ -415,7 +415,7 @@ Create Intel xorg config at `/etc/X11/xorg.conf.d/20-intel.conf` with the follow
 Create display config at `/etc/X11/xorg.conf.d/30-display.conf` with the following:
 
     Section "Monitor"
-      Identifier    "DSI"
+      Identifier    "DSI1"
       Option        "Rotate"                 "right"
     EndSection
 
