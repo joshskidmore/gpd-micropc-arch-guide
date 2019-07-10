@@ -43,6 +43,7 @@ Arch Linux and Windows 10.
       - [linux-mainline-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-5.2rc6-1-x86_64.pkg.tar.gz)
       - [linux-mainline-docs-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-docs-5.2rc6-1-x86_64.pkg.tar.gz)
       - [linux-mainline-headers-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-headers-5.2rc6-1-x86_64.pkg.tar.gz)
+      - You can also use the 5.2 kernel currently in the Archlinux `testing` repo--you can add this to `pacman.conf` below
   - ability to understand basic linux commands
   - patience (and eyesight) to spend a good bit of time looking at small, sideways text
 
@@ -51,7 +52,7 @@ Arch Linux and Windows 10.
   1. Download standard Arch linux ISO
   2. Write ISO to USB drive
   3. Boot MicroPC and tap `F7`
-  4. _IMMEDIATELY_ hit `e` which edits the kernel options and add ` nomodeset=1` to the end of the options and hit enter. *NOTE: You might not
+  4. _IMMEDIATELY_ hit `e` which edits the kernel options and add ` nomodeset=1 fbcon=rotate:1` to the end of the options and hit enter. *NOTE: You might not
       see the end of the kernel options on the MicroPC display. You can either connect an external display via HDMI or conservatively arrow right
       and shoot in the blind. If you do the later, make sure to add the space before `nomodeset=1`.
   4. In the options, select the USB device containing Arch
@@ -173,7 +174,7 @@ First thing, we need to install mainline kernel packages since the standard pack
     mount /dev/sdb1 /mnt
     cd /mnt; pacman -U *.gz
 
-Set your hostname (yeah, this is the most difficult part .. at least for me)
+Set your hostname (yeah, this is the most difficult part... at least for me)
 
     echo MYHOSTNAME > /etc/hostname
 
@@ -228,8 +229,11 @@ to a mainline config at `/boot/loader/entries/arch-mainline.conf`:
     initrd /initramfs-linux-mainline.img
     options rd.luks.name=[UUID]=luks root=/dev/mapper/rootvg-root rw fbcon=rotate:1
 
-Of note is the kernel command line option `fbcon=rotate:1`. This will rotate any non-X content to the
+Note the kernel command line option `fbcon=rotate:1`. This will rotate any non-X content to the
 right (after reboot).
+
+Also note that we don't include `nomodeset=1` here--that's because it will interfere
+with running our X setup below.
 
 We also need to edit (or possibly create) the file `/boot/loader/loader.conf`. This file handles
 systemd-boot's general config options. Most of the following options should be self explanitory, but
@@ -242,7 +246,12 @@ the BIOS to the kernel. The file should contain:
 
 Specify a timezone:
 
+    # obviously set this to your correct timezone :)
     ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+    
+Set your clock:
+
+    timedatectl set-ntp true
 
 Create `/etc/locale.conf` with the following:
 
@@ -267,7 +276,7 @@ Create your user and set a password:
     useradd -m -g users -G wheel,storage,power -s /bin/bash [USERNAME]
     passwd [USERNAME]
 
-If you wish to run sudo'd commands without entering a password, run `export EDITOR=vi; visudo` and
+If you wish to run sudo'd commands without entering a password, run `EDITOR=vi visudo` and
 uncomment the line:
 
     %wheel ALL=(ALL) NOPASSWD: ALL
@@ -301,15 +310,17 @@ Login with the user you created, *not* `root`.
 ## Wirelessly connect to the internet (again)
 You know, because reboot.
 
-    wifi-menu
+    sudo wifi-menu
 
 ## Add some repos to pacman
 
+(Why?)
 Edit `/etc/pacman.conf` and uncomment these lines:
 
     [multilib]
     Include = /etc/pacman.d/mirrorlists
 
+(Why?)
 In `/etc/pacman.conf`, append these lines to the bottom
 
     [archlinuxfr]
@@ -335,6 +346,7 @@ If you prefer another AUR/pacman tool, feel free to replace this step and `yay` 
     yay -Sy
 
 ## Additional timezone setup
+(Why?)
 `tzselect` is an interactive utility. Upon running the following command, choose your region and timezone.
 
     sudo tzselect
@@ -346,8 +358,7 @@ If you prefer another AUR/pacman tool, feel free to replace this step and `yay` 
     yay -S thermald
 
     # Enable + start
-    sudo systemctl enable thermald.service
-    sudo systemctl start thermald.service
+    sudo systemctl enable --now thermald.service
 
 ## NetworkManager
 
@@ -355,8 +366,7 @@ If you prefer another AUR/pacman tool, feel free to replace this step and `yay` 
     yay -S networkmanager network-manager-applet nm-connection-editor
 
     # Enable + start
-    sudo systemctl enable NetworkManager
-    sudo systemctl start NetworkManager
+    sudo systemctl enable --now NetworkManager
 
 `nmtui` is a command-line utility which allows selection of a network. Note: Because `wifi-menu` was used,
 and a wifi network has already been selected, `nmtui` might fail or error. Upon next reboot,
@@ -378,8 +388,7 @@ and a wifi network has already been selected, `nmtui` might fail or error. Upon 
     yay -S bluez bluez-utils bluez-tools
 
     # Enable + start
-    sudo systemctl enable bluetooth
-    sudo systemctl start bluetooth
+    sudo systemctl enable --now bluetooth
 
     # (optional) Install nice traybar utils
     yay -S blueman blueberry
@@ -391,13 +400,16 @@ TLP helps reduce power by setting some sane power defaults.
     yay -S tlp
 
     # Enable + start
-    sudo systemctl enable tlp
-    sudo systemctl start tlp
+    sudo systemctl enable --now tlp
 
 ## Xorg
 
 ### Install Xorg packages
 
+    # grab the whole set of xorg stuff
+    yay -S --needed xorg xinit-session
+    
+    # ... or just grab certain necessary tools
     yay -S xorg-server xorg-xev xorg-xinit xorg-xkill xorg-xmodmap xorg-xprop xorg-xrandr xorg-xrdb xorg-xset xinit-xsession
 
 ### Create MicroPC Xorg configs
@@ -420,6 +432,8 @@ Create display config at `/etc/X11/xorg.conf.d/30-display.conf` with the followi
     EndSection
 
 ### Install Intel video drivers
+(Why not download it with the xorg line above? Does it matter for some reason that we download it after
+the xorg setup confs?)
 
     yay -S xf86-video-intel
 
