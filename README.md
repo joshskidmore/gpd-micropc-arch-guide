@@ -39,10 +39,6 @@ Arch Linux and Windows 10.
   - [GPD MicroPC](https://www.indiegogo.com/projects/gpd-micropc-6-inch-handheld-industry-laptop)
   - [Arch ISO](https://www.archlinux.org/download) written to USB stick
   - [Microsoft Windows 10 installer](https://www.microsoft.com/en-us/software-download/windows10ISO) on USB stick
-  - an extra USB drive for the Arch 5.2 packages (or possibly add them to your Arch USB stick)
-      - [linux-mainline-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-5.2rc6-1-x86_64.pkg.tar.gz)
-      - [linux-mainline-docs-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-docs-5.2rc6-1-x86_64.pkg.tar.gz)
-      - [linux-mainline-headers-5.2rc6-1-x86_64.pkg.tar.gz](https://github.com/joshskidmore/gpd-micropc-arch-guide/raw/master/linux-mainline-packages/linux-mainline-headers-5.2rc6-1-x86_64.pkg.tar.gz)
   - ability to understand basic linux commands
   - patience (and eyesight) to spend a good bit of time looking at small, sideways text
 
@@ -167,12 +163,6 @@ wifi network.
 
 Awesome! You're now in your to-be Arch filesystem. Let's install some basic shit.
 
-First thing, we need to install mainline kernel packages since the standard packages don't yet support the MicroPC.
-
-    # the next steps assume you copied the three packages to an external usb stick labeled sdb
-    mount /dev/sdb1 /mnt
-    cd /mnt; pacman -U *.gz
-
 Set your hostname (yeah, this is the most difficult part .. at least for me)
 
     echo MYHOSTNAME > /etc/hostname
@@ -219,15 +209,6 @@ UUID you dumped into the file. Remove the brackets.
     initrd /initramfs-linux.img
     options rd.luks.name=[UUID]=luks root=/dev/mapper/rootvg-root rw fbcon=rotate:1
 
-The above systemd-boot entry will eventually be default, but for now, we need to duplicate that config
-to a mainline config at `/boot/loader/entries/arch-mainline.conf`:
-
-    title Arch Linux Mainline
-    linux /vmlinuz-linux-mainline
-    initrd /intel-ucode.img
-    initrd /initramfs-linux-mainline.img
-    options rd.luks.name=[UUID]=luks root=/dev/mapper/rootvg-root rw fbcon=rotate:1
-
 Of note is the kernel command line option `fbcon=rotate:1`. This will rotate any non-X content to the
 right (after reboot).
 
@@ -236,7 +217,7 @@ systemd-boot's general config options. Most of the following options should be s
 one that might not be is `console-mode 2`. This option will force larger text during the handoff from
 the BIOS to the kernel. The file should contain:
 
-    default arch-mainline
+    default arch
     auto-firmware no
     timeout 3
 
