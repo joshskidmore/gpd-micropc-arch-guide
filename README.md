@@ -154,7 +154,7 @@ wifi network.
     mount /dev/sda1 /mnt/boot
 
     # Pacstrap the /mnt directory with utilities needed for arch-chroot
-    pacstrap /mnt base base-devel dialog openssl-1.0 bash-completion git intel-ucode wpa_supplicant
+    pacstrap /mnt base base-devel dialog netctl openssl-1.0 bash-completion git intel-ucode wpa_supplicant
 
     # Generate your fstab
     genfstab -pU /mnt >> /mnt/etc/fstab
